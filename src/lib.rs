@@ -80,13 +80,13 @@ pub enum UnnaturalFeature {
 }
 
 impl UnnaturalFeature {
-    pub fn new<T: ?Sized>(mut rng: &mut T) -> UnnaturalFeature
+    pub fn new<T: ?Sized>(rng: &mut T) -> UnnaturalFeature
     where
         T: Rng,
     {
         match rng.gen_range(1..=12) {
-            1..=9 => UnnaturalFeature::Arcane(Arcane::new(&mut rng)),
-            10..=11 => UnnaturalFeature::Planar(Planar::new(&mut rng)),
+            1..=9 => UnnaturalFeature::Arcane(Arcane::new(rng)),
+            10..=11 => UnnaturalFeature::Planar(Planar::new(rng)),
             12..=12 => UnnaturalFeature::Divine(Divine::new(rng)),
             _ => unreachable!(),
         }
@@ -122,13 +122,12 @@ impl Display for Discovery {
 }
 
 impl Discovery {
-    pub fn new<T: ?Sized>(mut rng: &mut T) -> Discovery
+    pub fn new<T: ?Sized>(rng: &mut T) -> Discovery
     where
         T: Rng,
     {
-        // let mut rng = rand::thread_rng();
         match rng.gen_range(1..=12) {
-            1 => Discovery::UnnaturalFeature(UnnaturalFeature::new(&mut rng)),
+            1 => Discovery::UnnaturalFeature(UnnaturalFeature::new(rng)),
             2..=4 => Discovery::NaturalFeature,
             5..=6 => Discovery::Evidence,
             7..=8 => Discovery::Creature,

@@ -4,5 +4,5 @@ use randomizer::Discovery;
 fn main() {
     let mut rng = rand::thread_rng();
     let discovery = Discovery::new(&mut rng);
-    println!("{}", discovery);
+    println!("Discovery: {}", discovery);
 }
