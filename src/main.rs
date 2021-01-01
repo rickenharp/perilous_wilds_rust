@@ -1,4 +1,4 @@
-use randomizer::Discovery;
+use perilous_wilds::Discovery;
 // use rand::prelude::*;
 
 fn main() {
