@@ -1,14 +1,15 @@
 use std::fmt::Display;
-use rand::prelude::*;
+
+use crate::dice::Rollable;
 
 pub struct Planar(String);
 
 impl Planar {
-    pub fn new<T: ?Sized>(rng: &mut T) -> Planar
+    pub fn new<T: ?Sized>(dice: &mut T) -> Planar
     where
-        T: Rng,
+        T: Rollable,
     {
-        match rng.gen_range(1..=12) {
+        match dice.roll() {
             1..=4 => Planar(String::from("distortion/warp")),
             5..=8 => Planar(String::from("portal/gate")),
             9..=10 => Planar(String::from("rift/tear")),

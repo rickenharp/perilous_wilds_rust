@@ -1,14 +1,15 @@
 use std::fmt::Display;
-use rand::prelude::*;
+
+use crate::dice::Rollable;
 
 pub struct Divine(String);
 
 impl Divine {
-    pub fn new<T: ?Sized>(rng: &mut T) -> Divine
+    pub fn new<T: ?Sized>(dice: &mut T) -> Divine
     where
-        T: Rng,
+        T: Rollable,
     {
-        match rng.gen_range(1..=12) {
+        match dice.roll() {
             1..=3 => Divine(String::from("mark/sign")),
             4..=6 => Divine(String::from("cursed place")),
             7..=9 => Divine(String::from("hallowed place")),

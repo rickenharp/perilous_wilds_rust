@@ -1,11 +1,11 @@
 use std::fmt::Display;
 
-use rand::prelude::*;
-
-mod unnatural_feature;
+mod dice;
 mod natural_feature;
-pub use unnatural_feature::UnnaturalFeature;
+mod unnatural_feature;
+pub use dice::Dice;
 pub use natural_feature::NaturalFeature;
+pub use unnatural_feature::UnnaturalFeature;
 
 pub enum Discovery {
     UnnaturalFeature(UnnaturalFeature),
@@ -28,13 +28,13 @@ impl Display for Discovery {
 }
 
 impl Discovery {
-    pub fn new<T: ?Sized>(rng: &mut T) -> Discovery
+    pub fn new<T: ?Sized>(dice: &mut T) -> Discovery
     where
-        T: Rng,
+        T: dice::Rollable,
     {
-        match rng.gen_range(1..=12) {
-            1 => Discovery::UnnaturalFeature(UnnaturalFeature::new(rng)),
-            2..=4 => Discovery::NaturalFeature(NaturalFeature::new(rng)),
+        match dice.roll() {
+            1 => Discovery::UnnaturalFeature(UnnaturalFeature::new(dice)),
+            2..=4 => Discovery::NaturalFeature(NaturalFeature::new(dice)),
             5..=6 => Discovery::Evidence,
             7..=8 => Discovery::Creature,
             9..=12 => Discovery::Structure,

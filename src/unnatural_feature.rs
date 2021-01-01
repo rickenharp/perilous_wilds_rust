@@ -1,12 +1,12 @@
 use std::fmt::Display;
-use rand::prelude::*;
 
 mod arcane;
-mod planar;
 mod divine;
+mod planar;
+use crate::dice::Rollable;
 pub use crate::unnatural_feature::arcane::Arcane;
-pub use crate::unnatural_feature::planar::Planar;
 pub use crate::unnatural_feature::divine::Divine;
+pub use crate::unnatural_feature::planar::Planar;
 
 pub enum UnnaturalFeature {
     Arcane(Arcane),
@@ -15,14 +15,14 @@ pub enum UnnaturalFeature {
 }
 
 impl UnnaturalFeature {
-    pub fn new<T: ?Sized>(rng: &mut T) -> UnnaturalFeature
+    pub fn new<T: ?Sized>(dice: &mut T) -> UnnaturalFeature
     where
-        T: Rng,
+        T: Rollable,
     {
-        match rng.gen_range(1..=12) {
-            1..=9 => UnnaturalFeature::Arcane(Arcane::new(rng)),
-            10..=11 => UnnaturalFeature::Planar(Planar::new(rng)),
-            12..=12 => UnnaturalFeature::Divine(Divine::new(rng)),
+        match dice.roll() {
+            1..=9 => UnnaturalFeature::Arcane(Arcane::new(dice)),
+            10..=11 => UnnaturalFeature::Planar(Planar::new(dice)),
+            12..=12 => UnnaturalFeature::Divine(Divine::new(dice)),
             _ => unreachable!(),
         }
     }
