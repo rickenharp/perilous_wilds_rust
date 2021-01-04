@@ -29,7 +29,7 @@ impl Rollable for MockDice {
             self.index = 0;
         }
         let result = self.results[self.index];
-        self.index = self.index + 1;
+        self.index += 1;
         result
     }
 }

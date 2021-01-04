@@ -1,8 +1,14 @@
 use std::fmt::Display;
 
+mod alignment;
+mod aspect;
 mod dice;
 mod natural_feature;
 mod unnatural_feature;
+mod element;
+pub use alignment::Alignment;
+pub use element::Element;
+pub use aspect::Aspect;
 pub use dice::Dice;
 pub use natural_feature::NaturalFeature;
 pub use unnatural_feature::UnnaturalFeature;
