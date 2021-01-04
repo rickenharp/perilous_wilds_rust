@@ -29,14 +29,13 @@ impl Rollable for MockDice {
             self.index = 0;
         }
         let result = self.results[self.index];
-        self.index = self.index + 1;
+        self.index += 1;
         result
     }
 }
 #[cfg(test)]
 mod tests {
     use crate::dice::*;
-    // use crate::dice::Rollable;
 
     fn foo(dice: &mut impl Rollable) -> u8 {
         dice.roll()
