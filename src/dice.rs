@@ -36,7 +36,6 @@ impl Rollable for MockDice {
 #[cfg(test)]
 mod tests {
     use crate::dice::*;
-    // use crate::dice::Rollable;
 
     fn foo(dice: &mut impl Rollable) -> u8 {
         dice.roll()

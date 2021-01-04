@@ -2,7 +2,29 @@ use std::fmt::Display;
 
 use crate::{dice::Rollable, Alignment, Aspect};
 
-pub struct Divine(String, Alignment, Aspect);
+#[derive(Debug, PartialEq)]
+pub enum Divine {
+    Mark {
+        alignment: Alignment,
+        aspect: Aspect,
+    },
+    CursedPlace {
+        alignment: Alignment,
+        aspect: Aspect,
+    },
+    HallowedPlace {
+        alignment: Alignment,
+        aspect: Aspect,
+    },
+    WatchedPlace {
+        alignment: Alignment,
+        aspect: Aspect,
+    },
+    Presence {
+        alignment: Alignment,
+        aspect: Aspect,
+    },
+}
 
 impl Divine {
     pub fn new<T: ?Sized>(dice: &mut T) -> Divine
@@ -12,11 +34,11 @@ impl Divine {
         let alignment = Alignment::new(dice);
         let aspect = Aspect::new(dice);
         match dice.roll() {
-            1..=3 => Divine(String::from("mark/sign"), alignment, aspect),
-            4..=6 => Divine(String::from("cursed place"), alignment, aspect),
-            7..=9 => Divine(String::from("hallowed place"), alignment, aspect),
-            10..=11 => Divine(String::from("watched place"), alignment, aspect),
-            12 => Divine(String::from("presence"), alignment, aspect),
+            1..=3 => Divine::Mark { alignment, aspect },
+            4..=6 => Divine::CursedPlace { alignment, aspect },
+            7..=9 => Divine::HallowedPlace { alignment, aspect },
+            10..=11 => Divine::WatchedPlace { alignment, aspect },
+            12 => Divine::Presence { alignment, aspect },
             _ => unreachable!(),
         }
     }
@@ -24,14 +46,37 @@ impl Divine {
 
 impl Display for Divine {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}\nAlignment: {}\nAspect: {}", self.0, self.1, self.2)
+        match self {
+            Divine::Mark { alignment, aspect } => {
+                write!(f, "mark/sign\nAlignment: {}\nAspect: {}", alignment, aspect)
+            }
+            Divine::CursedPlace { alignment, aspect } => write!(
+                f,
+                "cursed place\nAlignment: {}\nAspect: {}",
+                alignment, aspect
+            ),
+            Divine::HallowedPlace { alignment, aspect } => write!(
+                f,
+                "hallowed place\nAlignment: {}\nAspect: {}",
+                alignment, aspect
+            ),
+            Divine::WatchedPlace { alignment, aspect } => write!(
+                f,
+                "watched place\nAlignment: {}\nAspect: {}",
+                alignment, aspect
+            ),
+            Divine::Presence { alignment, aspect } => {
+                write!(f, "presence\nAlignment: {}\nAspect: {}", alignment, aspect)
+            }
+        }
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::dice::*;
     use crate::alignment::*;
+    use crate::aspect::*;
+    use crate::dice::*;
 
     use super::Divine;
 
@@ -39,8 +84,7 @@ mod tests {
     fn it_works() {
         let mut dice = MockDice::new(vec![1]);
         let divine = Divine::new(&mut dice);
-        assert_eq!(divine.0, String::from("mark/sign"));
-        assert_eq!(divine.1, Alignment(String::from("Chaotic")))
+        assert_matches!(divine, Divine::Mark{alignment, aspect} if alignment == Alignment::Chaotic && aspect == Aspect::Power);
     }
 
     #[test]

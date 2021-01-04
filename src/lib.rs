@@ -1,15 +1,18 @@
 use std::fmt::Display;
+#[cfg(test)]
+#[macro_use]
+extern crate assert_matches;
 
 mod alignment;
 mod aspect;
 mod dice;
+mod element;
 mod natural_feature;
 mod unnatural_feature;
-mod element;
 pub use alignment::Alignment;
-pub use element::Element;
 pub use aspect::Aspect;
 pub use dice::Dice;
+pub use element::Element;
 pub use natural_feature::NaturalFeature;
 pub use unnatural_feature::UnnaturalFeature;
 

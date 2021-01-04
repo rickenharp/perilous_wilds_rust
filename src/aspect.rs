@@ -1,11 +1,13 @@
 use std::fmt::Display;
 
+use crate::aspect::Aspect::{
+    Culture, Hate, Knowledge, Love, Nature, Peace, Power, Time, Trickery, Twice, War,
+};
 use crate::dice::Rollable;
 use crate::element::Element;
-use crate::aspect::Aspect::{Power, Trickery, Time, Knowledge, Culture, Nature, War, Peace, Hate, Love, Twice};
 
 #[derive(Debug, PartialEq)]
-pub enum Aspect{
+pub enum Aspect {
     Power,
     Trickery,
     Time,
@@ -17,22 +19,8 @@ pub enum Aspect{
     Hate,
     Love,
     Element(Element),
-    Twice(Box<Aspect>, Box<Aspect>)
+    Twice(Box<Aspect>, Box<Aspect>),
 }
-
-// static ASPECTS: [&str; 11] = [
-//     "power/strength",
-//     "trickery/dexterity",
-//     "time/constitution",
-//     "knowledge/intelligence",
-//     "nature/wisdom",
-//     "culture/charisma",
-//     "war/lies/discord",
-//     "peace/truth/balance",
-//     "hate/envy",
-//     "love/admiration",
-//     "Element"
-// ];
 
 impl Aspect {
     pub fn new<T: ?Sized>(dice: &mut T) -> Aspect
@@ -57,16 +45,18 @@ impl Aspect {
                     first = Aspect::new(dice);
                     match first {
                         Twice(_, _) => continue,
-                        _ => break
+                        _ => break,
                     }
                 }
                 let mut second: Aspect;
                 loop {
                     second = Aspect::new(dice);
-                    if second == first { continue }
+                    if second == first {
+                        continue;
+                    }
                     match second {
-                        Twice(_,_) => continue,
-                        _ => break
+                        Twice(_, _) => continue,
+                        _ => break,
                     }
                 }
                 Twice(Box::new(first), Box::new(second))
@@ -76,20 +66,8 @@ impl Aspect {
     }
 }
 impl Display for Aspect {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result
-    {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            // ,
-            // ,
-            // ,
-            // ,
-            // ,
-            // ,
-            // ,
-            // ,
-            // ,
-            // ,
-            // "Element"
             Power => write!(f, "power/strength"),
             Trickery => write!(f, "trickery/dexterity"),
             Time => write!(f, "time/constitution"),
@@ -101,9 +79,8 @@ impl Display for Aspect {
             Hate => write!(f, "hate/envy"),
             Love => write!(f, "love/admiration"),
             Aspect::Element(e) => write!(f, "{}", e),
-            Twice(first, second) => write!(f, "{} and {}", first, second )
+            Twice(first, second) => write!(f, "{} and {}", first, second),
         }
-
     }
 }
 
@@ -124,7 +101,10 @@ mod tests {
     fn it_rolls_twice_on_12() {
         let mut dice = MockDice::new(vec![12, 1, 1, 9]);
         let aspect = Aspect::new(&mut dice);
-        assert_eq!(aspect.to_string(), String::from("power/strength and hate/envy"))
+        assert_eq!(
+            aspect.to_string(),
+            String::from("power/strength and hate/envy")
+        )
     }
 
     #[test]

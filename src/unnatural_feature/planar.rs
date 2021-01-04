@@ -1,6 +1,6 @@
 use std::fmt::Display;
 
-use crate::{Alignment, dice::Rollable};
+use crate::{dice::Rollable, Alignment};
 
 pub struct Planar(String, Alignment);
 

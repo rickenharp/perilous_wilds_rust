@@ -31,7 +31,6 @@ mod tests {
     use crate::dice::*;
 
     use super::Arcane;
-    // use crate::dice::Rollable;
 
     #[test]
     fn it_works() {

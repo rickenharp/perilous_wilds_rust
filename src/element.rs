@@ -3,13 +3,13 @@ use std::fmt::Display;
 use crate::dice::Rollable;
 
 #[derive(Debug, PartialEq)]
-pub enum Element{
+pub enum Element {
     Air,
     Earth,
     Fire,
     Water,
     Life,
-    Death
+    Death,
 }
 
 impl Element {
@@ -31,14 +31,25 @@ impl Element {
 impl Display for Element {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Element::Air => { write!(f, "{}", "air") }
-            Element::Earth => { write!(f, "{}", "earth") }
-            Element::Fire => { write!(f, "{}", "fire") }
-            Element::Water => { write!(f, "{}", "water") }
-            Element::Life => { write!(f, "{}", "life") }
-            Element::Death => { write!(f, "{}", "death") }
+            Element::Air => {
+                write!(f, "air")
+            }
+            Element::Earth => {
+                write!(f, "earth")
+            }
+            Element::Fire => {
+                write!(f, "fire")
+            }
+            Element::Water => {
+                write!(f, "water")
+            }
+            Element::Life => {
+                write!(f, "life")
+            }
+            Element::Death => {
+                write!(f, "death")
+            }
         }
-
     }
 }
 
@@ -47,7 +58,6 @@ mod tests {
     use crate::dice::*;
 
     use super::Element;
-    // use crate::dice::Rollable;
 
     #[test]
     fn test_air() {
