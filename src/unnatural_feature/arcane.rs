@@ -1,7 +1,15 @@
 use std::fmt::Display;
 
 use crate::{dice::Rollable, Alignment};
-pub struct Arcane(String, Alignment);
+
+#[derive(Debug, PartialEq)]
+pub enum Arcane {
+    Residue(Alignment),
+    Blight(Alignment),
+    Alteration(Alignment),
+    Enchantment(Alignment),
+    Source(Alignment),
+}
 
 impl Arcane {
     pub fn new<T: ?Sized>(dice: &mut T) -> Arcane
@@ -10,11 +18,11 @@ impl Arcane {
     {
         let alignment = Alignment::new(dice);
         match dice.roll() {
-            1..=2 => Arcane(String::from("residue"), alignment),
-            3..=5 => Arcane(String::from("blight"), alignment),
-            6..=7 => Arcane(String::from("alteration/mutation"), alignment),
-            8..=10 => Arcane(String::from("enchantment"), alignment),
-            11..=12 => Arcane(String::from("source/repository"), alignment),
+            1..=2 => Arcane::Residue(alignment),
+            3..=5 => Arcane::Blight(alignment),
+            6..=7 => Arcane::Alteration(alignment),
+            8..=10 => Arcane::Enchantment(alignment),
+            11..=12 => Arcane::Source(alignment),
             _ => unreachable!(),
         }
     }
@@ -22,12 +30,21 @@ impl Arcane {
 
 impl Display for Arcane {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}\nAlignment: {}", self.0, self.1)
+        match self {
+            Arcane::Residue(alignment) => write!(f, "residue\nAlignment: {}", alignment),
+            Arcane::Blight(alignment) => write!(f, "blight\nAlignment: {}", alignment),
+            Arcane::Alteration(alignment) => {
+                write!(f, "alteration/mutation\nAlignment: {}", alignment)
+            }
+            Arcane::Enchantment(alignment) => write!(f, "enchantment\nAlignment: {}", alignment),
+            Arcane::Source(alignment) => write!(f, "source/repository\nAlignment: {}", alignment),
+        }
     }
 }
 
 #[cfg(test)]
 mod tests {
+    use crate::alignment::*;
     use crate::dice::*;
 
     use super::Arcane;
@@ -36,8 +53,7 @@ mod tests {
     fn it_works() {
         let mut dice = MockDice::new(vec![1]);
         let arcane = Arcane::new(&mut dice);
-        assert_eq!(arcane.0, String::from("residue"));
-        assert_eq!(arcane.1.to_string(), String::from("Chaotic"))
+        assert_matches!(arcane, Arcane::Residue(alignment) if alignment == Alignment::Chaotic)
     }
 
     #[test]
