@@ -5,12 +5,16 @@ extern crate assert_matches;
 
 mod alignment;
 mod aspect;
+mod creature;
 mod dice;
 mod element;
 mod natural_feature;
 mod unnatural_feature;
+mod activity;
+
 pub use alignment::Alignment;
 pub use aspect::Aspect;
+pub use creature::Creature;
 pub use dice::Dice;
 pub use element::Element;
 pub use natural_feature::NaturalFeature;
@@ -20,7 +24,7 @@ pub enum Discovery {
     UnnaturalFeature(UnnaturalFeature),
     NaturalFeature(NaturalFeature),
     Evidence,
-    Creature,
+    Creature(Creature),
     Structure,
 }
 
@@ -30,7 +34,7 @@ impl Display for Discovery {
             Discovery::UnnaturalFeature(uf) => write!(f, "Unnatural Feature: {}", uf),
             Discovery::NaturalFeature(nf) => write!(f, "Natural Feature: {}", nf),
             Discovery::Evidence => write!(f, "Evidence"),
-            Discovery::Creature => write!(f, "Creature"),
+            Discovery::Creature(c) => write!(f, "Creature: {}", c),
             Discovery::Structure => write!(f, "Structure"),
         }
     }
@@ -45,7 +49,7 @@ impl Discovery {
             1 => Discovery::UnnaturalFeature(UnnaturalFeature::new(dice)),
             2..=4 => Discovery::NaturalFeature(NaturalFeature::new(dice)),
             5..=6 => Discovery::Evidence,
-            7..=8 => Discovery::Creature,
+            7..=8 => Discovery::Creature(Creature::new(dice)),
             9..=12 => Discovery::Structure,
             _ => unreachable!(),
         }
